@@ -58,7 +58,8 @@ class TareaTest : DescribeSpec({
        tareaIntegradora.costoTarea().shouldBe(2750)
       }
       it("nominaIntegracion"){
-        tareaIntegradora.nominaIntegracion().size.shouldBe(13)
+        tareaIntegradora.nominaIntegracion()
+        tareaIntegradora.nominaEmpleados.size.shouldBe(13)
       }
 
     }

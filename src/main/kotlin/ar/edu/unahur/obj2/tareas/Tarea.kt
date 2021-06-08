@@ -6,18 +6,17 @@ open class Empleado(val sueldoPorHs: Int){}
 
 class Responsable(sueldoPorHs: Int): Empleado(sueldoPorHs){}
 
-interface Tarea {
+abstract class Tarea(var responsable: Responsable) {
+    var nominaEmpleados = mutableListOf<Empleado>()
 
-    fun costoTarea(): Int
-    fun horasNecesarias(): Int
+    abstract fun costoTarea(): Int
+    abstract fun horasNecesarias(): Int
 }
 
 
 
 
-class Simple(var horasEstimadas: Int, var responsable: Responsable, var costoInfraestructura: Int): Tarea{
-    var nominaEmpleados = mutableListOf<Empleado>()
-
+class Simple(var horasEstimadas: Int, responsable: Responsable, var costoInfraestructura: Int): Tarea(responsable){
 
     fun agregarEmpleado(unEmpleado: Empleado){
         if(nominaEmpleados.isEmpty()){ nominaEmpleados.add(responsable) }
@@ -42,9 +41,9 @@ class Simple(var horasEstimadas: Int, var responsable: Responsable, var costoInf
 
 }
 
-class Integracion(var responsable: Responsable): Tarea{
+class Integracion(responsable: Responsable): Tarea(responsable){
     var listaTareas = mutableListOf<Tarea>()
-    var nominaEmpleados = nominaIntegracion()
+
 
     fun agregarTarea(unaTarea: Tarea){
         listaTareas.add(unaTarea)
@@ -64,12 +63,11 @@ class Integracion(var responsable: Responsable): Tarea{
         return  bonus + costoLista
     }
 
-    fun nominaIntegracion(): List<Empleado>{
-        var nomina = mutableListOf<Empleado>()
-        nomina.add(responsable)
+    fun nominaIntegracion(){
 
-        listaTareas.forEach { nomina.addAll(it.nominaEmpleados) }
+        nominaEmpleados.add(responsable)
 
-        return nomina
+        listaTareas.forEach { nominaEmpleados.addAll(it.nominaEmpleados) }
+
     }
 }
